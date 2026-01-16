@@ -7,7 +7,7 @@ import os
 # ============================================
 IOS_APP_URL = "https://apps.apple.com/np/app/veel-app/id6455370559"
 ANDROID_APP_URL = "https://play.google.com/store/apps/details?id=com.veel.app&hl=en"
-FALLBACK_URL = "https://www.veelapp.com"
+FALLBACK_URL = "https://veelapp.com/?tab=creators"
 
 # Flask app for handling redirects
 app = Flask(__name__)
