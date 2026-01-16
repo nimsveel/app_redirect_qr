@@ -14,16 +14,17 @@ app = Flask(__name__)
 
 @app.route('/')
 def home():
-    """Home page with instructions"""
-    return """
+    """Home page with instructions and QR code"""
+    qr_url = request.host_url + 'app'
+    return f"""
     <!DOCTYPE html>
     <html>
     <head>
         <title>Veel App - Smart Redirect</title>
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <style>
-            * { margin: 0; padding: 0; box-sizing: border-box; }
-            body {
+            * {{ margin: 0; padding: 0; box-sizing: border-box; }}
+            body {{
                 font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif;
                 background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
                 min-height: 100vh;
@@ -31,27 +32,27 @@ def home():
                 align-items: center;
                 justify-content: center;
                 padding: 20px;
-            }
-            .container {
+            }}
+            .container {{
                 background: white;
                 border-radius: 20px;
                 padding: 40px;
-                max-width: 500px;
+                max-width: 600px;
                 width: 100%;
                 box-shadow: 0 20px 60px rgba(0,0,0,0.3);
                 text-align: center;
-            }
-            h1 {
+            }}
+            h1 {{
                 color: #333;
                 margin-bottom: 10px;
                 font-size: 2.5em;
-            }
-            .subtitle {
+            }}
+            .subtitle {{
                 color: #666;
                 margin-bottom: 30px;
                 font-size: 1.1em;
-            }
-            .button {
+            }}
+            .button {{
                 display: inline-block;
                 margin: 10px;
                 padding: 15px 40px;
@@ -63,29 +64,50 @@ def home():
                 font-weight: 600;
                 transition: transform 0.2s, box-shadow 0.2s;
                 box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
-            }
-            .button:hover {
+            }}
+            .button:hover {{
                 transform: translateY(-2px);
                 box-shadow: 0 6px 20px rgba(102, 126, 234, 0.6);
-            }
-            .features {
+            }}
+            .qr-container {{
+                background: #f8f9fa;
+                padding: 25px;
+                border-radius: 15px;
+                margin: 30px 0;
+            }}
+            #qrCanvas {{
+                display: inline-block;
+                padding: 15px;
+                background: white;
+                border-radius: 10px;
+            }}
+            .features {{
                 margin-top: 30px;
                 text-align: left;
                 color: #555;
-            }
-            .feature {
+            }}
+            .feature {{
                 margin: 15px 0;
                 padding-left: 30px;
                 position: relative;
-            }
-            .feature:before {
+            }}
+            .feature:before {{
                 content: "✓";
                 position: absolute;
                 left: 0;
                 color: #667eea;
                 font-weight: bold;
                 font-size: 1.2em;
-            }
+            }}
+            .qr-label {{
+                color: #666;
+                font-size: 0.95em;
+                margin-bottom: 15px;
+            }}
+            @media (max-width: 600px) {{
+                .container {{ padding: 20px; }}
+                h1 {{ font-size: 1.8em; }}
+            }}
         </style>
     </head>
     <body>
@@ -93,7 +115,13 @@ def home():
             <h1>📱 Veel App</h1>
             <p class="subtitle">Download our app for the best experience!</p>
             
+            <div class="qr-container">
+                <p class="qr-label">Scan with your phone:</p>
+                <div id="qrCanvas"></div>
+            </div>
+            
             <a href="/app" class="button">Download Now</a>
+            <a href="/qr" class="button">View QR & Link</a>
             
             <div class="features">
                 <div class="feature">Automatically detects your device</div>
@@ -101,6 +129,19 @@ def home():
                 <div class="feature">Works on iOS, Android & Desktop</div>
             </div>
         </div>
+        
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+        <script>
+            // Generate QR code
+            new QRCode(document.getElementById("qrCanvas"), {{
+                text: "{qr_url}",
+                width: 256,
+                height: 256,
+                colorDark: "#000000",
+                colorLight: "#ffffff",
+                correctLevel: QRCode.CorrectLevel.H
+            }});
+        </script>
     </body>
     </html>
     """
